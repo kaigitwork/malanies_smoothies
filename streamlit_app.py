@@ -51,7 +51,7 @@ if options:
 
     for fruit_chosen in options:
         ingredient_string += fruit_chosen + ' '
-        st.subheader(fruit_chosen + 'Nutrition information')
+        st.subheader(fruit_chosen + ' Nutrition information')
         # New section to display fruityvice nutritions
         fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
         # st.text(fruityvice_response)
