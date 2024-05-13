@@ -70,13 +70,12 @@ if options:
         # st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
 
         st.write(search_on)
-        st.stop()
         
-        st.subheader(fruit_chosen + ' Nutrition information')
+        # st.subheader(fruit_chosen + ' Nutrition information')
         # New section to display fruityvice nutritions
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + str(search_on))
+        #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + str(search_on))
         # st.text(fruityvice_response)
-        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
+        #fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
 
 
