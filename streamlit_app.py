@@ -1,7 +1,7 @@
 # Import python packages
 import streamlit as st
 import requests
-import inflect
+#import inflect
 import pandas as pd
 from snowflake.snowpark.functions import col 
 # from snowflake.snowpark.context import get_active_session
@@ -67,11 +67,11 @@ if options:
     for fruit_chosen in options:
         ingredient_string += fruit_chosen + ' '
         search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
-        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
+        # st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
         
         st.subheader(fruit_chosen + ' Nutrition information')
         # New section to display fruityvice nutritions
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + search_on)
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + str(search_on))
         # st.text(fruityvice_response)
         fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
