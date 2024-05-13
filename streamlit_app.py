@@ -5,14 +5,12 @@ import requests
 import pandas as pd
 from snowflake.snowpark.functions import col 
 # from snowflake.snowpark.context import get_active_session
-
-"""
+ 
 def singularize_plural_words(input_string):
     p = inflect.engine()
     words = input_string.split()
     singularized_words = [p.singular_noun(word) if p.singular_noun(word) else word for word in words]
-    return ' '.join(singularized_words)
-"""
+    return ' '.join(singularized_words) 
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
@@ -66,19 +64,22 @@ if options:
 
     for fruit_chosen in options:
         ingredient_string += fruit_chosen + ' '
-        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0] 
-        st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
- 
+        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+
+        if not search_on: 
+            update_stmt = """'update FRUIT_OPTIONS set search_on ='""" +  singularize_plural_words(fruit_chosen.replace(" ", "").lower()) +
+                        """'""" + """ where fruit_name = '""" + fruit_chosen;
+            session.sql(update_stmt).collect()
+            search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        # st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
         
-        # st.subheader(fruit_chosen + ' Nutrition information')
+        st.subheader(fruit_chosen + ' Nutrition information')
+            
         # New section to display fruityvice nutritions
-        #fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + str(search_on))
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + str(search_on))
         # st.text(fruityvice_response)
-        #fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
-
-
-
-
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
+            
 
 
 
