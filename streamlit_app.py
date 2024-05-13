@@ -1,5 +1,6 @@
 # Import python packages
 import streamlit as st
+import requests
 from snowflake.snowpark.functions import col 
 # from snowflake.snowpark.context import get_active_session
 
@@ -46,8 +47,33 @@ if options:
         session.sql(my_insert_stmt).collect()
         st.success('Your Smoothie is ordered! ' + name_on_order, icon="✅")
 
-# New section to display fruityvice nutritions
-import requests
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-# st.text(fruityvice_response)
-fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
+    ingredient_string = ''
+
+    for fruit_chosen in options:
+        ingredient_string += fruit_chosen + ' '
+        st.subheader(fruit_chosen + 'Nutrition information')
+        # New section to display fruityvice nutritions
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen)
+        # st.text(fruityvice_response)
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
