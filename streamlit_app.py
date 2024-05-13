@@ -67,7 +67,7 @@ if options:
         search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
 
         if not search_on: 
-           update_stmt = "update FRUIT_OPTIONS set search_on = '" + singularize_plural_words(fruit_chosen.replace(" ", "").lower()) + "' where fruit_name = '" + fruit_chosen + "'"
+           update_stmt = "update smoothies.public.FRUIT_OPTIONS set search_on = '" + singularize_plural_words(fruit_chosen.replace(" ", "").lower()) + "' where fruit_name = '" + fruit_chosen + "'"
            session.sql(update_stmt).collect()
            search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0] 
 
