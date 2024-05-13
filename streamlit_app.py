@@ -29,7 +29,7 @@ my_dataframe = session.table("smoothies.public.fruit_options") \
 
 # st.dataframe(data=my_dataframe, use_container_width=True)
 pd_df=my_dataframe.to_pandas() 
-st.dataframe(pd_df)
+#st.dataframe(pd_df)
 # st.stop();
 
 name_on_order = st.text_input("Name on Smoothie")
@@ -64,12 +64,18 @@ if options:
 
     for fruit_chosen in options:
         ingredient_string += fruit_chosen + ' '
-        search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+        search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0] 
 
         if not search_on: 
            update_stmt = "update smoothies.public.FRUIT_OPTIONS set search_on = '" + singularize_plural_words(fruit_chosen.replace(" ", "").lower()) + "' where fruit_name = '" + fruit_chosen + "'"
            session.sql(update_stmt).collect()
-           search_on = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0] 
+           
+        refresh_df = session.table("smoothies.public.fruit_options") \
+                      .select(col("FRUIT_NAME"), col('SEARCH_ON'))
+
+        refresh_pd_df = refresh_df.to_pandas(); 
+        search_on = refresh_pd_df.loc[refresh_pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0] 
+
 
         st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
         
