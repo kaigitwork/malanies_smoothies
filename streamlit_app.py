@@ -1,9 +1,16 @@
 # Import python packages
 import streamlit as st
 import requests
+import inflect
 import pandas as pd
 from snowflake.snowpark.functions import col 
 # from snowflake.snowpark.context import get_active_session
+
+def singularize_plural_words(input_string):
+    p = inflect.engine()
+    words = input_string.split()
+    singularized_words = [p.singular_noun(word) if p.singular_noun(word) else word for word in words]
+    return ' '.join(singularized_words)
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie :cup_with_straw:")
@@ -62,7 +69,7 @@ if options:
         
         st.subheader(fruit_chosen + ' Nutrition information')
         # New section to display fruityvice nutritions
-        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_chosen.replace(" ", "").lower())
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + singularize_plural_words(fruit_chosen.replace(" ", "").lower()))
         # st.text(fruityvice_response)
         fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
 
